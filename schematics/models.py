@@ -11,7 +11,8 @@ from .types.compound import ModelType
 from .types.serializable import Serializable
 from .exceptions import BaseError, ModelValidationError, MockCreationError
 from .transforms import allow_none, atoms, flatten, expand
-from .transforms import to_primitive, to_native, to_python, convert
+from .transforms import to_primitive, to_native, convert
+from .transforms import as_dict
 from .validate import validate
 from .datastructures import OrderedDict as OrderedDictWithSort
 
@@ -273,8 +274,8 @@ class Model(object):
     def to_native(self, role=None, context=None):
         return to_native(self.__class__, self, role=role, context=context)
 
-    def to_python(self, role=None, context=None):
-        return to_python(self.__class__, self, role=role, context=context)
+    def as_dict(self, role=None, context=None):
+        return as_dict(self.__class__, self, role=role, context=context)
 
     def to_primitive(self, role=None, context=None):
         """Return data as it would be validated. No filtering of output unless

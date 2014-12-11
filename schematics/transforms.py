@@ -393,8 +393,8 @@ def convert(cls, instance_or_dict, context=None, partial=True, strict=False,
     return data
 
 
-def to_python(cls, instance_or_dict, role=None, raise_error_on_role=True,
-              context=None):
+def as_dict(cls, instance_or_dict, role=None, raise_error_on_role=True,
+            context=None):
     field_converter = lambda field, value: field.to_native(value,
                                                            context=context)
     name_selector = lambda field_name, field: field_name
