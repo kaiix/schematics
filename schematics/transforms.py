@@ -120,7 +120,7 @@ def import_loop(cls, instance_or_dict, field_converter, context=None,
     return data
 
 
-def export_loop(cls, instance_or_dict, field_converter, name_selector=None,
+def export_loop(cls, instance_or_dict, field_converter, name_selector,
                 role=None, raise_error_on_role=False, print_none=False):
     """
     The export_loop function is intended to be a general loop definition that
@@ -158,10 +158,7 @@ def export_loop(cls, instance_or_dict, field_converter, name_selector=None,
         gottago = cls._options.roles.get("default", gottago)
 
     for field_name, field, value in atoms(cls, instance_or_dict):
-        if name_selector:
-            serialized_name = name_selector(field_name, field)
-        else:
-            serialized_name = field.serialized_name or field_name
+        serialized_name = name_selector(field_name, field)
 
         # Skipping this field was requested
         if gottago(field_name, value):
@@ -401,8 +398,7 @@ def to_python(cls, instance_or_dict, role=None, raise_error_on_role=True,
     field_converter = lambda field, value: field.to_native(value,
                                                            context=context)
     name_selector = lambda field_name, field: field_name
-    data = export_loop(cls, instance_or_dict, field_converter,
-                       name_selector=name_selector,
+    data = export_loop(cls, instance_or_dict, field_converter, name_selector,
                        role=role, raise_error_on_role=raise_error_on_role)
     return data
 
@@ -411,7 +407,8 @@ def to_native(cls, instance_or_dict, role=None, raise_error_on_role=True,
               context=None):
     field_converter = lambda field, value: field.to_native(value,
                                                            context=context)
-    data = export_loop(cls, instance_or_dict, field_converter,
+    name_selector = lambda field_name, field: field.serialized_name or field_name
+    data = export_loop(cls, instance_or_dict, field_converter, name_selector,
                        role=role, raise_error_on_role=raise_error_on_role)
     return data
 
@@ -440,7 +437,8 @@ def to_primitive(cls, instance_or_dict, role=None, raise_error_on_role=True,
     """
     field_converter = lambda field, value: field.to_primitive(value,
                                                               context=context)
-    data = export_loop(cls, instance_or_dict, field_converter,
+    name_selector = lambda field_name, field: field.serialized_name or field_name
+    data = export_loop(cls, instance_or_dict, field_converter, name_selector,
                        role=role, raise_error_on_role=raise_error_on_role)
     return data
 

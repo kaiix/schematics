@@ -406,7 +406,7 @@ class Model(object):
         return u"<%s: %s>" % (class_name, obj)
 
     def __str__(self):
-        return '%s object' % self.__class__.__name__        
+        return '%s object' % self.__class__.__name__
 
     def __unicode__(self):
         return '%s object' % self.__class__.__name__
